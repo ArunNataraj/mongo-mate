@@ -23,7 +23,7 @@ function handleJsonInput() {
 function displayViewData(document, data) {
     const contentDiv = document.getElementById("content");
     // Clear existing content
-    contentDiv.innerHTML = `${getviewForm()} <br>`;
+    contentDiv.innerHTML = `${getViewForm()} <br>`;
 
     // Check if data is available
     if (!data || data.length === 0) {

@@ -1,5 +1,5 @@
 from uuid import uuid4
-from app.utils.constants import MONGO_ID, MONGO_SET
+from app.utils.constants import MONGO_ID, MONGO_SET, INSERT_ONE, INSERT_MANY, FIND_ONE, FIND_MANY
 
 __mongo_db_client = None
 __data_base = None
@@ -13,24 +13,23 @@ def set_mongo_db_connection(mongo_db_client):
     print(__data_base)
 
 
-def get_records_from_collection(collection_name: str, query: dict = {}):
+def get_record_from_collection(collection_name: str, query: dict = {}, function=FIND_ONE):
     collection = __data_base[collection_name]
-    records = list(collection.find(query))
-    print(records)
-    return records
-
-
-def get_record_from_collection(collection_name: str, query: dict = {}):
-    collection = __data_base[collection_name]
-    record = collection.find_one(query)
+    if function == FIND_ONE:
+        record = collection.find_one(query)
+    elif function == FIND_MANY:
+        record = list(collection.find(query))
     return record
 
 
-def insert_record_to_collection(collection_name, fields):
-    if MONGO_ID not in fields:
-        fields[MONGO_ID] = f"""{uuid4()}"""
+def insert_record_to_collection(collection_name, fields, function=INSERT_ONE):
     collection = __data_base[collection_name]
-    record = collection.insert_one(fields)
+    if function == INSERT_ONE:
+        if MONGO_ID not in fields:
+            fields[MONGO_ID] = f"""{uuid4()}"""
+        record = collection.insert_one(fields)
+    elif function == INSERT_MANY:
+        record = collection.insert_many(fields)
     return record
 
 

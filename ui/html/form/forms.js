@@ -1,17 +1,37 @@
-function getInsertForm() {
-    return `
-        <h3>Insert Data</h3>
-        <form id="insertForm">
-            <div style="margin-bottom: 10px;">
-                <label for="insertJsonInput">JSON Input:</label>
-                <textarea id="insertJsonInput" name="insertJson" rows="10" style="width: 100%;" required></textarea>
-                <p id="jsonErrorMessage" class="error-message"></p>
-            </div>
-            <!-- Add more fields as needed -->
+function getViewForm() {
+    return `<h3>View Record(s)</h3>
+    <form id="viewForm">
+        <label for="field">Field:</label>
+        <input type="text" id="field" name="field" placeholder="field...">
+        <label for="operator">Operator:</label>
+        <select id="operator" name="operator" placeholder="operators">
+            <option value="equals">Equals</option>
+        </select>
+    
+        <label for="value">Value:</label>
+        <input type="text" id="fieldValue" name="fieldValue" placeholder="value..."><br><br>
+        <label>
+            <input type="radio" name="trueFalseOption" value="false" checked>
+            Record
+        </label>
+        <label>
+            <input type="radio" name="trueFalseOption" value="true">
+            All Records
+        </label>
+        <button id="viewRecord" type="submit">View Record(s)</button>
+    </form>`;
+}
 
-            <button type="submit">Insert Record</button>
-        </form>
-    `;
+function getInsertForm() {
+    return `<h3>Insert Record(s)</h3>
+    <form id="insertForm">
+        <div style="margin-bottom: 10px;">
+            <label for="insertJsonInput">JSON Input:</label>
+            <textarea id="insertJsonInput" name="insertJson" rows="10" style="width: 100%;" required></textarea>
+            <p id="jsonErrorMessage" class="error-message"></p>
+        </div>
+        <button type="submit">Insert Record</button>
+    </form>`;
 }
 
 function getUpdateForm() {
@@ -38,10 +58,21 @@ function getDeleteForm() {
     return `
         <h3>Delete Data</h3>
         <form id="deleteForm">
-            <label for="deleteRecordId">Record ID to Delete:</label>
-            <input type="text" id="deleteRecordId" name="recordIdToDelete" required>
+            <label for="field">Field:</label>
+            <input type="text" id="field" name="field" placeholder="field...">
+            <label for="operator">Operator:</label>
+            <select id="operator" name="operator" placeholder="operators">
+                <option value="operator..." disabled selected>operators...</option>
+                <option value="equals">Equals</option>
+                <option value="contains">Contains</option>
+                <!-- Add more options based on your needs -->
+            </select>
 
-            <button type="submit">Delete Record</button>
+            <label for="value">Value:</label>
+            <input type="text" id="value" name="value" placeholder="value..."><br><br>
+
+            <button id="deleteRecord" type="submit">Delete Record</button>
+            <button id="deleteAllRecords" type="submit">Delete All Records</button>
         </form>
     `;
 }
@@ -61,28 +92,6 @@ function getQueryExecutionForm() {
             <input type="text" id="queryParameter" name="queryParameter" required>
 
             <button type="submit">Execute Query</button>
-        </form>
-    `;
-}
-
-function getviewForm() {
-    return `
-        <h3>View Record(s)</h3>
-        <form id="viewForm">
-            <label for="field">Field:</label>
-            <input type="text" id="field" name="field" placeholder="field...">
-            <label for="operator">Operator:</label>
-            <select id="operator" name="operator" placeholder="operators">
-                <option value="operator..." disabled selected>operators...</option>
-                <option value="equals">Equals</option>
-                <option value="contains">Contains</option>
-                <!-- Add more options based on your needs -->
-            </select>
-
-            <label for="value">Value:</label>
-            <input type="text" id="value" name="value" placeholder="value..."><br><br>
-
-            <button id="viewRecord" type="submit">View Record</button> <button id="viewRecords" type="submit">View All Records</button>
         </form>
     `;
 }

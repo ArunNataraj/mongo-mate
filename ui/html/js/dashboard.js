@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     viewDataLink.addEventListener("click", function (event) {
         event.preventDefault();
-        loadViewDataPage(document);
+        loadContent(getViewForm());
     });
     insertDataLink.addEventListener("click", function (event) {
         event.preventDefault();
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         switch (formId) {
             case "viewForm":
-                loadViewDataPage();
+                loadViewDataPage(document);
                 break;
             case "insertForm":
                 handleInsertFormSubmission(document);

@@ -1,12 +1,24 @@
 const server = "http://localhost:8000/"
 
 function loadViewDataPage(document) {
+    const contentDiv = document.getElementById("content");
     const tableNameSelect = document.getElementById("tableNameSelect");
     const selectedTableName = tableNameSelect.value;
-    let accessToken = localStorage.getItem("accessToken");
-
+    const accessToken = localStorage.getItem("accessToken");
+    const selectedValue = document.querySelector('input[name="trueFalseOption"]:checked').value;
+    const field = document.getElementById("field").value;
+    const operator = document.getElementById("operator").value;
+    const fieldValue = document.getElementById("fieldValue").value;
+    let path = "record"
+    let queryParameter=""
+    if (selectedValue === "true") {
+        path = "records"
+    }
+    if (field && operator && fieldValue) {
+        queryParameter=`?&field=${field}&operator=${operator}&value=${fieldValue}`;
+    }
     // Make API request to fetch data based on the selected table name
-    fetch(`${server}records/${selectedTableName}`, {
+    fetch(`${server}${path}/${selectedTableName}${queryParameter}`, {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${accessToken}`,
@@ -33,10 +45,14 @@ function handleInsertFormSubmission(document) {
     const tableNameSelect = document.getElementById("tableNameSelect");
     const selectedTableName = tableNameSelect.value;
     let accessToken = localStorage.getItem("accessToken");
-    const insertFieldsValue = document.getElementById("insertJsonInput").value;
-
+    const insertFieldsValue = JSON.parse(document.getElementById("insertJsonInput").value);
+    const isArray = Array.isArray(insertFieldsValue)
+    let path = "record"
+    if (isArray) {
+        path = "records"
+    }
     // Make API request to insert data using the values obtained
-    fetch(`${server}record`, {
+    fetch(`${server}${path}`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${accessToken}`,
@@ -44,7 +60,7 @@ function handleInsertFormSubmission(document) {
         },
         body: JSON.stringify({
             collection_name: selectedTableName,
-            fields: JSON.parse(insertFieldsValue),
+            fields: insertFieldsValue,
         }),
     })
         .then(response => {
@@ -110,7 +126,17 @@ function handleDeleteFormSubmission(document) {
     const tableNameSelect = document.getElementById("tableNameSelect");
     const selectedTableName = tableNameSelect.value;
     let accessToken = localStorage.getItem("accessToken");
-    const deleteRecordIdValue = document.getElementById("deleteRecordId").value;
+    const deleteRecordButton = document.getElementById("deleteRecord");
+    const deleteAllRecordsButton = document.getElementById("deleteAllRecords");
+
+    deleteAllRecordsButton.addEventListener("submit", function () {
+        console.log("ALL RECORDS DELETE")
+    });
+
+
+    deleteRecordButton.addEventListener("submit", function () {
+        console.log("ONE RECORD DELETE")
+    });
 
     // Make API request to delete data using the value obtained
     fetch(`${server}record`, {
@@ -121,7 +147,7 @@ function handleDeleteFormSubmission(document) {
         },
         body: JSON.stringify({
             collection_name: selectedTableName,
-            fields: { _id: deleteRecordIdValue },
+            // fields: { _id: deleteRecordIdValue },
         }),
     })
         .then(response => {
