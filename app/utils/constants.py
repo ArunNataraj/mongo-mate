@@ -1,3 +1,4 @@
+"""List Of Constants"""
 EXP = "exp"
 EXP_MINS = 30
 AUTHORIZATION = "authorization"

@@ -1,3 +1,4 @@
+"""mongo-mate app"""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.auth_routes import session_router
@@ -19,6 +20,7 @@ app.add_middleware(
 
 
 def startup_event():
+    """This Method Triggers During Server StartUp"""
     connect_to_mongo_db()
 
 

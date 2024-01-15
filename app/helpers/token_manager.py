@@ -1,3 +1,4 @@
+"""Token Management Methods"""
 import datetime
 import jwt
 from fastapi import Request, HTTPException, status
@@ -7,15 +8,19 @@ from app.utils.config import ALGORITHM, TOKEN_SECRET_KEY
 
 
 def generate_hash_password(password: str):
-    hash = pbkdf2_sha256.hash(password)
-    return hash
+    """This Method Generates Hashed Password"""
+    hashed_password = pbkdf2_sha256.hash(password)
+    return hashed_password
 
 
-def verify_password(user_password: str, password:str):
+def verify_password(user_password: str, password: str):
+    """This Method Verify Password With Hash"""
     verify = pbkdf2_sha256.verify(password, user_password)
     return verify
 
+
 def generate_access_token(payload: dict):
+    """This Method Generates Access Token"""
     token_expire_time = datetime.datetime.utcnow(
     ) + datetime.timedelta(minutes=EXP_MINS)
     to_encode = payload.copy()
@@ -27,6 +32,7 @@ def generate_access_token(payload: dict):
 
 
 def is_token_valid(request: Request):
+    """This Method Validates Token"""
     try:
         authorization = request.headers.get(AUTHORIZATION)
         if authorization:
