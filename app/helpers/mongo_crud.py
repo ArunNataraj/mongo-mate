@@ -1,5 +1,5 @@
 from uuid import uuid4
-from app.utils.constants import MONGO_ID, MONGO_SET, INSERT_ONE, INSERT_MANY, FIND_ONE, FIND_MANY
+from app.utils.constants import MONGO_ID, MONGO_SET, INSERT_ONE, INSERT_MANY, FIND_ONE, FIND_MANY, DELETE_ONE, DELETE_MANY
 
 __mongo_db_client = None
 __data_base = None
@@ -40,9 +40,12 @@ def update_record_in_collection(collection_name, query, fields):
     return record
 
 
-def delete_record_from_collection(collection_name, fields):
+def delete_record_from_collection(collection_name, query: dict = dict, function=DELETE_ONE):
     collection = __data_base[collection_name]
-    record = collection.find_one_and_delete(fields)
+    if function == DELETE_ONE:
+        record = collection.delete_one(query)
+    elif function == DELETE_MANY:
+        record = collection.delete_many(query)
     return record
 
 

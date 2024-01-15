@@ -10,12 +10,12 @@ function loadViewDataPage(document) {
     const operator = document.getElementById("operator").value;
     const fieldValue = document.getElementById("fieldValue").value;
     let path = "record"
-    let queryParameter=""
+    let queryParameter = ""
     if (selectedValue === "true") {
         path = "records"
     }
     if (field && operator && fieldValue) {
-        queryParameter=`?&field=${field}&operator=${operator}&value=${fieldValue}`;
+        queryParameter = `?&field=${field}&operator=${operator}&value=${fieldValue}`;
     }
     // Make API request to fetch data based on the selected table name
     fetch(`${server}${path}/${selectedTableName}${queryParameter}`, {
@@ -126,20 +126,24 @@ function handleDeleteFormSubmission(document) {
     const tableNameSelect = document.getElementById("tableNameSelect");
     const selectedTableName = tableNameSelect.value;
     let accessToken = localStorage.getItem("accessToken");
-    const deleteRecordButton = document.getElementById("deleteRecord");
-    const deleteAllRecordsButton = document.getElementById("deleteAllRecords");
-
-    deleteAllRecordsButton.addEventListener("submit", function () {
-        console.log("ALL RECORDS DELETE")
-    });
-
-
-    deleteRecordButton.addEventListener("submit", function () {
-        console.log("ONE RECORD DELETE")
-    });
-
+    const selectedValue = document.querySelector('input[name="trueFalseOption"]:checked').value;
+    const field = document.getElementById("field").value;
+    const operator = document.getElementById("operator").value;
+    const fieldValue = document.getElementById("fieldValue").value;
+    let reqBody = {};
+    let path = "record"
+    if (selectedValue === "true") {
+        path = "records"
+    }
+    if (field && operator && fieldValue) {
+        reqBody = {
+            field,
+            operator,
+            value: fieldValue
+        }
+    }
     // Make API request to delete data using the value obtained
-    fetch(`${server}record`, {
+    fetch(`${server}${path}`, {
         method: "DELETE",
         headers: {
             "Authorization": `Bearer ${accessToken}`,
@@ -147,7 +151,7 @@ function handleDeleteFormSubmission(document) {
         },
         body: JSON.stringify({
             collection_name: selectedTableName,
-            // fields: { _id: deleteRecordIdValue },
+            ...reqBody
         }),
     })
         .then(response => {
@@ -161,7 +165,7 @@ function handleDeleteFormSubmission(document) {
             console.log("API response:", data);
 
             // Display the deleted record as view data
-            displayViewData(document, { records: [data.deleted_record], message: data.message });
+            // displayViewData(document, { records: [data.deleted_record], message: data.message });
 
             // Optionally, provide user feedback on success
         })

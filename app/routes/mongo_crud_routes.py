@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
 from app.helpers.token_manager import is_token_valid
 from app.helpers.mongo_crud import get_record_from_collection, insert_record_to_collection, update_record_in_collection, delete_record_from_collection, get_collections_from_db
-from app.utils.constants import COLLECTION_NAMES, MESSAGE, RECORDS, USER, INSERT_MANY, FIND_MANY
+from app.utils.constants import COLLECTION_NAMES, MESSAGE, RECORDS, USER, INSERT_MANY, FIND_MANY, DELETE_MANY
 from app.utils.validators import ViewRecordRequest, InsertRecordRequest
 from app.utils.utils import add_uuid_to_records
 from app.utils.queries import generate_query
@@ -45,6 +45,18 @@ async def insert_records(payload: InsertRecordRequest):
     return JSONResponse(content=response)
 
 
+@crud_router.delete("/records")
+async def delete_record(payload: ViewRecordRequest):
+    query = generate_query(payload.dict(exclude_none=True))
+    records = delete_record_from_collection(
+        payload.collection_name, query, DELETE_MANY)
+    response = {
+        # "deleted_record": record,
+        MESSAGE: "Records Deleted From The Collection Successfully"
+    }
+    return JSONResponse(content=response)
+
+
 @crud_router.get("/record/{collection_name}")
 async def get_record(payload: ViewRecordRequest = Depends()):
     query = generate_query(payload.dict(exclude_none=True))
@@ -76,11 +88,11 @@ async def update_record(request: Request):
 
 
 @crud_router.delete("/record")
-async def delete_record(request: Request):
-    payload = await request.json()
-    record = delete_record_from_collection(**payload)
+async def delete_record(payload: ViewRecordRequest):
+    query = generate_query(payload.dict(exclude_none=True))
+    records = delete_record_from_collection(payload.collection_name, query)
     response = {
-        "deleted_record": record,
+        # "deleted_record": record,
         MESSAGE: "Record Deleted From The Collection Successfully"
     }
     return JSONResponse(content=response)
