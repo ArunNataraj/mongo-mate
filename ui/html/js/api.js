@@ -85,12 +85,26 @@ function handleUpdateFormSubmission(document) {
     const tableNameSelect = document.getElementById("tableNameSelect");
     const selectedTableName = tableNameSelect.value;
     let accessToken = localStorage.getItem("accessToken");
-    const updateRecordIdValue = document.getElementById("updateRecordId").value;
     const updateFieldsValue = document.getElementById("updateJsonInput").value;
+    const selectedValue = document.querySelector('input[name="trueFalseOption"]:checked').value;
+    const field = document.getElementById("field").value;
+    const operator = document.getElementById("operator").value;
+    const fieldValue = document.getElementById("fieldValue").value;
+    let reqBody = {};
+    let path = "record"
+    if (selectedValue === "true") {
+        path = "records"
+    }
+    if (field && operator && fieldValue) {
+        console.log("IN PUt")
+        reqBody = {
+            field,
+            operator,
+            value: fieldValue
+        }
+    }
 
-
-
-    fetch(`${server}record`, {
+    fetch(`${server}${path}`, {
         method: "PUT",
         headers: {
             "Authorization": `Bearer ${accessToken}`,
@@ -98,8 +112,8 @@ function handleUpdateFormSubmission(document) {
         },
         body: JSON.stringify({
             collection_name: selectedTableName,
-            query: { _id: updateRecordIdValue },
             fields: JSON.parse(updateFieldsValue),
+            ...reqBody
         }),
     })
         .then(response => {

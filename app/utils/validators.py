@@ -9,19 +9,9 @@ class UserRegistration(BaseModel):
     created_at: datetime | None = None
     last_log_in: datetime | None = None
 
-
-class RecordRequest(BaseModel):
+class CrudRequest(BaseModel):
     collection_name: str
-    record_id: str | None = None
-
-
-class ViewRecordRequest(BaseModel):
-    collection_name: str
+    fields: dict | list[dict] | None = None
     field: str | None = None
     operator: str | None = None
     value: Any = None
-
-
-class InsertRecordRequest(BaseModel):
-    collection_name: str
-    fields: dict | list[dict]

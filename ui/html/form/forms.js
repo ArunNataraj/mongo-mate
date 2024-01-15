@@ -35,27 +35,39 @@ function getInsertForm() {
 }
 
 function getUpdateForm() {
-    return `
-        <h3>Update Data</h3>
-        <form id="updateForm">
-            <div style="margin-bottom: 10px;">
-                <label for="updateRecordId">Record ID:</label>
-                <input type="text" id="updateRecordId" name="recordId" required>
-            </div>
-
-            <div style="margin-bottom: 10px;">
-                <label for="updateJsonInput">JSON Input:</label>
-                <textarea id="updateJsonInput" name="updateJson" rows="10" style="width: 100%;" required></textarea>
-                <p id="jsonErrorMessage" class="error-message"></p>
-            </div>
+    return `<h3>Update Record(s)</h3>
+    <form id="updateForm">
+        <div style="margin-bottom: 10px;">
+            <label for="field">Field:</label>
+            <input type="text" id="field" name="field" placeholder="field...">
+            <label for="operator">Operator:</label>
+            <select id="operator" name="operator" placeholder="operators">
+                <option value="equals">Equals</option>
+            </select>
     
-            <button type="submit">Update Record</button>
-        </form>
-    `;
+            <label for="value">Value:</label>
+            <input type="text" id="fieldValue" name="fieldValue" placeholder="value..."><br><br>
+        </div>
+    
+        <div style="margin-bottom: 10px;">
+            <label for="updateJsonInput">JSON Input:</label>
+            <textarea id="updateJsonInput" name="updateJson" rows="10" style="width: 100%;" required></textarea>
+            <p id="jsonErrorMessage" class="error-message"></p>
+        </div>
+        <label>
+            <input type="radio" name="trueFalseOption" value="false" checked>
+            Record
+        </label>
+        <label>
+            <input type="radio" name="trueFalseOption" value="true">
+            All Records
+        </label>
+        <button type="submit">Update Record(s)</button>
+    </form>`;
 }
 
 function getDeleteForm() {
-    return `<h3>Delete Data</h3>
+    return `<h3>Delete Record(s)</h3>
     <form id="deleteForm">
         <label for="field">Field:</label>
         <input type="text" id="field" name="field" placeholder="field..." required>
@@ -74,7 +86,7 @@ function getDeleteForm() {
             <input type="radio" name="trueFalseOption" value="true">
             All Records
         </label>
-        <button id="deleteRecord" type="submit">Delete Record</button>
+        <button id="deleteRecord" type="submit">Delete Record(s)</button>
     </form>
     `;
 }
