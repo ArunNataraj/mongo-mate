@@ -1,7 +1,7 @@
 """User Methods"""
 from fastapi import HTTPException, status
 from app.helpers.mongo_orm import insert_record_to_collection, get_record_from_collection
-from app.utils.constants import USER, EMAIL
+from app.utils.constants import USER, EMAIL, INVALID_PASS, NOT_REGISTERED
 from app.utils.utils import get_current_utc_time
 from app.helpers.token_manager import generate_access_token, verify_password
 
@@ -27,11 +27,11 @@ def verify_user(fileds):
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid Password"
+                detail=INVALID_PASS
             )
 
     else:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User Not Registered / Invalid Email"
+            detail=NOT_REGISTERED
         )

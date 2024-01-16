@@ -3,7 +3,8 @@ import datetime
 import jwt
 from fastapi import Request, HTTPException, status
 from passlib.hash import pbkdf2_sha256
-from app.utils.constants import EXP, EXP_MINS, AUTHORIZATION, SPACE, INVALID_EXPIRED_TOKEN, ACCESS_TOKEN_MISSING
+from app.utils.constants import (EXP, EXP_MINS, AUTHORIZATION, SPACE,
+                                 INVALID_EXPIRED_TOKEN, ACCESS_TOKEN_MISSING)
 from app.utils.config import ALGORITHM, TOKEN_SECRET_KEY
 
 

@@ -1,15 +1,21 @@
 """Mongo DB Routes"""
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from app.helpers.token_manager import is_token_valid
-from app.helpers.mongo_orm import get_record_from_collection, insert_record_to_collection, update_record_in_collection, delete_record_from_collection, get_collections_from_db, get_pre_defined_queries_list, query_executor
-from app.utils.constants import COLLECTION_NAMES, MESSAGE, RECORDS, USER, INSERT_MANY, FIND_MANY, DELETE_MANY, UPDATE_MANY, QUERIES
+from app.helpers.mongo_orm import (get_record_from_collection, insert_record_to_collection,
+                                   update_record_in_collection, delete_record_from_collection,
+                                   get_collections_from_db, get_pre_defined_queries_list,
+                                   query_executor)
+from app.utils.constants import (COLLECTION_NAMES, MESSAGE, RECORDS, USER, INSERT_MANY, FIND_MANY,
+                                 DELETE_MANY, UPDATE_MANY, QUERIES, QUERY_EXC_MSG,
+                                 QUERY_RETRIEVED_MSG,
+                                 RECORD_DELETED_MSG, RECORD_UPDATED_MSG, RECORD_INSERTED_MSG,
+                                 RECORD_RETRIEVE_MSG, COLLECTION_MSG)
 from app.utils.validators import CrudRequest, ExcuteQueryRequest
 from app.utils.utils import add_uuid_to_records
 from app.utils.queries import generate_query
 
-# crud_router = APIRouter(dependencies=[Depends(is_token_valid)])
-crud_router = APIRouter()
+crud_router = APIRouter(dependencies=[Depends(is_token_valid)])
 
 
 @crud_router.get("/collections")
@@ -19,7 +25,7 @@ async def get_collections():
     collections.remove(USER)
     response = {
         COLLECTION_NAMES: collections,
-        MESSAGE: "Collection Names Retrieved From The Data Base Successfully"
+        MESSAGE: COLLECTION_MSG
     }
     return JSONResponse(content=response)
 
@@ -32,7 +38,7 @@ async def get_records(payload: CrudRequest = Depends()):
         payload.collection_name, query, FIND_MANY)
     response = {
         RECORDS: records,
-        MESSAGE: "Records Retrieved From The Collection Successfully"
+        MESSAGE: RECORD_RETRIEVE_MSG
     }
     return JSONResponse(content=response)
 
@@ -44,7 +50,7 @@ async def insert_records(payload: CrudRequest):
     records = insert_record_to_collection(
         payload.collection_name, payload.fields, function=INSERT_MANY)
     response = {
-        MESSAGE: "Records Inserted to The Collection Successfully"
+        MESSAGE: RECORD_INSERTED_MSG
     }
     return JSONResponse(content=response)
 
@@ -56,7 +62,7 @@ async def update_records(payload: CrudRequest):
     records = update_record_in_collection(
         payload.collection_name, payload.fields,  query, UPDATE_MANY)
     response = {
-        MESSAGE: "Records Updated To The Collection Successfully"
+        MESSAGE: RECORD_UPDATED_MSG
     }
     return JSONResponse(content=response)
 
@@ -68,7 +74,7 @@ async def delete_records(payload: CrudRequest):
     records = delete_record_from_collection(
         payload.collection_name, query, DELETE_MANY)
     response = {
-        MESSAGE: "Records Deleted From The Collection Successfully"
+        MESSAGE: RECORD_DELETED_MSG
     }
     return JSONResponse(content=response)
 
@@ -80,7 +86,7 @@ async def get_record(payload: CrudRequest = Depends()):
     record = get_record_from_collection(payload.collection_name, query)
     response = {
         RECORDS: [record],
-        MESSAGE: "Record Retrieved From The Collection Successfully"
+        MESSAGE: RECORD_RETRIEVE_MSG
     }
     return JSONResponse(content=response)
 
@@ -90,7 +96,7 @@ async def insert_record(payload: CrudRequest):
     """Insert Record Endpoint"""
     record = insert_record_to_collection(**payload.dict(exclude_none=True))
     response = {
-        MESSAGE: "Record Inserted To The Collection Successfully"
+        MESSAGE: RECORD_INSERTED_MSG
     }
     return JSONResponse(content=response)
 
@@ -102,7 +108,7 @@ async def update_record(payload: CrudRequest):
     record = update_record_in_collection(
         payload.collection_name, payload.fields,  query)
     response = {
-        MESSAGE: "Record Updated To The Collection Successfully"
+        MESSAGE: RECORD_UPDATED_MSG
     }
     return JSONResponse(content=response)
 
@@ -113,7 +119,7 @@ async def delete_record(payload: CrudRequest):
     query = generate_query(payload.dict(exclude_none=True))
     record = delete_record_from_collection(payload.collection_name, query)
     response = {
-        MESSAGE: "Record Deleted From The Collection Successfully"
+        MESSAGE: RECORD_DELETED_MSG
     }
     return JSONResponse(content=response)
 
@@ -124,7 +130,7 @@ async def get_pre_defined_queries():
     queries = get_pre_defined_queries_list()
     response = {
         QUERIES: queries,
-        MESSAGE: "Pre Defined Queries Retrieved Successfully"
+        MESSAGE: QUERY_RETRIEVED_MSG
     }
     return JSONResponse(content=response)
 
@@ -135,6 +141,6 @@ async def execute_pre_defined_queries(payload: ExcuteQueryRequest):
     records = query_executor(payload)
     response = {
         RECORDS: records,
-        MESSAGE: "Query Executed Successfully"
+        MESSAGE: QUERY_EXC_MSG
     }
     return JSONResponse(content=response)

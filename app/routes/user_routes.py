@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from app.utils.validators import UserRegistration
 from app.helpers.token_manager import generate_hash_password
 from app.helpers.user import create_user
-from app.utils.constants import MESSAGE
+from app.utils.constants import MESSAGE, USER_REGISTRATION_MSG
 
 user_router = APIRouter()
 
@@ -15,6 +15,6 @@ async def user_registration(payload: UserRegistration):
     payload.password = generate_hash_password(payload.password)
     record = create_user(payload)
     response = {
-        MESSAGE: "User Registered in Successfully"
+        MESSAGE: USER_REGISTRATION_MSG
     }
     return JSONResponse(content=response)
