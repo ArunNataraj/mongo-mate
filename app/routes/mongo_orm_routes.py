@@ -1,14 +1,15 @@
 """Mongo DB Routes"""
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
 from app.helpers.token_manager import is_token_valid
-from app.helpers.mongo_crud import get_record_from_collection, insert_record_to_collection, update_record_in_collection, delete_record_from_collection, get_collections_from_db, get_pre_defined_queries_list
+from app.helpers.mongo_orm import get_record_from_collection, insert_record_to_collection, update_record_in_collection, delete_record_from_collection, get_collections_from_db, get_pre_defined_queries_list, query_executor
 from app.utils.constants import COLLECTION_NAMES, MESSAGE, RECORDS, USER, INSERT_MANY, FIND_MANY, DELETE_MANY, UPDATE_MANY, QUERIES
-from app.utils.validators import CrudRequest
+from app.utils.validators import CrudRequest, ExcuteQueryRequest
 from app.utils.utils import add_uuid_to_records
 from app.utils.queries import generate_query
 
-crud_router = APIRouter(dependencies=[Depends(is_token_valid)])
+# crud_router = APIRouter(dependencies=[Depends(is_token_valid)])
+crud_router = APIRouter()
 
 
 @crud_router.get("/collections")
@@ -124,5 +125,16 @@ async def get_pre_defined_queries():
     response = {
         QUERIES: queries,
         MESSAGE: "Pre Defined Queries Retrieved Successfully"
+    }
+    return JSONResponse(content=response)
+
+
+@crud_router.post("/execute-pre-defined-queries")
+async def execute_pre_defined_queries(payload: ExcuteQueryRequest):
+    """Execute Defined Queries Endpoint"""
+    records = query_executor(payload)
+    response = {
+        RECORDS: records,
+        MESSAGE: "Query Executed Successfully"
     }
     return JSONResponse(content=response)

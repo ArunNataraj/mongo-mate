@@ -1,6 +1,6 @@
 """User Methods"""
 from fastapi import HTTPException, status
-from app.helpers.mongo_crud import insert_record_to_collection, get_record_from_collection
+from app.helpers.mongo_orm import insert_record_to_collection, get_record_from_collection
 from app.utils.constants import USER, EMAIL
 from app.utils.utils import get_current_utc_time
 from app.helpers.token_manager import generate_access_token, verify_password

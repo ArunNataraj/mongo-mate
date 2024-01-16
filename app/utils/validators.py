@@ -19,3 +19,12 @@ class CrudRequest(BaseModel):
     field: str | None = None
     operator: str | None = None
     value: Any = None
+
+
+class ExcuteQueryRequest(BaseModel):
+    """Pre Defined Query Payload Validator"""
+    collection_name: str
+    pre_defined_query: str
+    field: str | None = None
+    limit_count: int | None = None
+    fields: list | None = None

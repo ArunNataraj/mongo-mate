@@ -45,6 +45,17 @@ document.addEventListener("DOMContentLoaded", function () {
         loadContent(getQueryExecutionForm());
         getCollectionNames(document);
         getPredefinedQueries(document);
+        const querySelect = document.getElementById("querySelect");
+        querySelect.addEventListener("change", function () {
+            // Get the selected value from the dropdown
+            const queryParams = getQueryParams()
+            console.log(queryParams)
+            const queryParameterInput = document.getElementById("queryParameter");
+            const selectedQuery = querySelect.value;
+
+            // Update the placeholder of the queryParameter input based on the selected query
+            queryParameterInput.placeholder = queryParams[selectedQuery]
+        });
     });
 
     logoutLink.addEventListener("click", function (event) {

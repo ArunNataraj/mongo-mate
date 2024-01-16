@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.auth_routes import session_router
-from app.routes.mongo_crud_routes import crud_router
+from app.routes.mongo_orm_routes import crud_router
 from app.routes.user_routes import user_router
 from app.helpers.startup_events import connect_to_mongo_db
 from app.utils.constants import STARTUP, CRUD, SESSION, ALL_ORIGIN

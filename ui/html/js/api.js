@@ -1,5 +1,6 @@
 const server = "http://localhost:8000/"
 const accessToken = localStorage.getItem("accessToken")
+let queryParams = {}
 
 function loadViewDataPage(document) {
     const contentDiv = document.getElementById("content");
@@ -92,7 +93,6 @@ function handleUpdateFormSubmission(document) {
         path = "records"
     }
     if (field && operator && fieldValue) {
-        console.log("IN PUt")
         reqBody = {
             field,
             operator,
@@ -254,18 +254,23 @@ function getPredefinedQueries(document) {
 
             // Clear existing options
             querySelect.innerHTML = "";
-
+            console.log(queries)
             // Populate dropdown with dynamic table names
-            queries.forEach(query => {
-                console.log(typeof(query))
+            Object.keys(queries).forEach(key => {
+                const query = queries[key];
                 const option = document.createElement("option");
-                option.value = Object.keys(query)[0];
-                option.text = query[option.value];
+                option.value = key
+                option.text = Object.keys(query)[0];
                 querySelect.appendChild(option);
-            });
+                queryParams[option.value] = query[option.text]
+            })
         })
         .catch(error => {
             console.error("Error fetching table names:", error);
             // Handle the error, show a message, or fallback to default table names
         });
+}
+
+function getQueryParams() {
+    return queryParams
 }

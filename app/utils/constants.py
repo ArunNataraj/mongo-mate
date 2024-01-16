@@ -25,11 +25,11 @@ DELETE_MANY = "delete_many"
 UPDATE_ONE = "update_one"
 UPDATE_MANY = "update_many"
 QUERIES = "queries"
-PRE_DEFINED_QUERIES = [
-    {"query1": "Create The Collection"},
-    {"query2": "Index The Collection"},
-    {"query3": "Sort The Collection in Ascending Order"},
-    {"query4": "Sort The Collection in Descending Order"},
-    {"query5": "View the Limited Number Of Records"},
-    {"query6": "Fetch Only Particular Columns From The Collection"}
-]
+PRE_DEFINED_QUERIES = {
+    "query1": {"Create The Collection": "collection_name"},
+    "query2": {"Index The Collection": "field_name"},
+    "query3": {"Sort The Collection in Ascending Order": "field_name"},
+    "query4": {"Sort The Collection in Descending Order": "field_name"},
+    "query5": {"View the Limited Number Of Records": "limit_count"},
+    "query6": {"Fetch Only Particular Columns From The Collection": "field_names"}
+}

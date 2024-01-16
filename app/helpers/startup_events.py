@@ -1,6 +1,6 @@
 """StartUP Methods"""
 from pymongo import MongoClient
-from app.helpers.mongo_crud import set_mongo_db_connection
+from app.helpers.mongo_orm import set_mongo_db_connection
 from app.utils.config import MONGO_CLIENT_URI
 
 
