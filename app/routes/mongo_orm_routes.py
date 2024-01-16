@@ -10,7 +10,7 @@ from app.utils.constants import (COLLECTION_NAMES, MESSAGE, RECORDS, USER, INSER
                                  DELETE_MANY, UPDATE_MANY, QUERIES, QUERY_EXC_MSG,
                                  QUERY_RETRIEVED_MSG,
                                  RECORD_DELETED_MSG, RECORD_UPDATED_MSG, RECORD_INSERTED_MSG,
-                                 RECORD_RETRIEVE_MSG, COLLECTION_MSG)
+                                 RECORD_RETRIEVE_MSG, COLLECTION_MSG, MONGO_ID)
 from app.utils.validators import CrudRequest, ExcuteQueryRequest
 from app.utils.utils import add_uuid_to_records
 from app.utils.queries import generate_query
@@ -48,8 +48,11 @@ async def insert_records(payload: CrudRequest):
     """Insert Records Endpoint"""
     payload.fields = add_uuid_to_records(payload.dict().get("fields"))
     records = insert_record_to_collection(
-        payload.collection_name, payload.fields, function=INSERT_MANY)
+        payload.collection_name, payload.fields, INSERT_MANY)
+    records = get_record_from_collection(
+        payload.collection_name, {MONGO_ID: {"$in": records.inserted_ids}}, FIND_MANY)
     response = {
+        RECORDS: records,
         MESSAGE: RECORD_INSERTED_MSG
     }
     return JSONResponse(content=response)
@@ -61,7 +64,10 @@ async def update_records(payload: CrudRequest):
     query = generate_query(payload.dict(exclude_none=True))
     records = update_record_in_collection(
         payload.collection_name, payload.fields,  query, UPDATE_MANY)
+    records = get_record_from_collection(
+        payload.collection_name, query, FIND_MANY)
     response = {
+        RECORDS: records,
         MESSAGE: RECORD_UPDATED_MSG
     }
     return JSONResponse(content=response)
@@ -71,9 +77,12 @@ async def update_records(payload: CrudRequest):
 async def delete_records(payload: CrudRequest):
     """Delete Records Endpoint"""
     query = generate_query(payload.dict(exclude_none=True))
+    deleted_records = get_record_from_collection(
+        payload.collection_name, query, FIND_MANY)
     records = delete_record_from_collection(
         payload.collection_name, query, DELETE_MANY)
     response = {
+        RECORDS: [] if records.deleted_count == 0 else deleted_records,
         MESSAGE: RECORD_DELETED_MSG
     }
     return JSONResponse(content=response)
@@ -95,7 +104,10 @@ async def get_record(payload: CrudRequest = Depends()):
 async def insert_record(payload: CrudRequest):
     """Insert Record Endpoint"""
     record = insert_record_to_collection(**payload.dict(exclude_none=True))
+    record = get_record_from_collection(
+        payload.collection_name, {MONGO_ID: record.inserted_id})
     response = {
+        RECORDS: [record],
         MESSAGE: RECORD_INSERTED_MSG
     }
     return JSONResponse(content=response)
@@ -107,7 +119,10 @@ async def update_record(payload: CrudRequest):
     query = generate_query(payload.dict(exclude_none=True))
     record = update_record_in_collection(
         payload.collection_name, payload.fields,  query)
+    record = get_record_from_collection(
+        payload.collection_name, query)
     response = {
+        RECORDS: [record],
         MESSAGE: RECORD_UPDATED_MSG
     }
     return JSONResponse(content=response)
@@ -117,8 +132,11 @@ async def update_record(payload: CrudRequest):
 async def delete_record(payload: CrudRequest):
     """Delete Record Endpoint"""
     query = generate_query(payload.dict(exclude_none=True))
+    deleted_record = get_record_from_collection(
+        payload.collection_name, query)
     record = delete_record_from_collection(payload.collection_name, query)
     response = {
+        RECORDS: [] if record.deleted_count == 0 else deleted_record,
         MESSAGE: RECORD_DELETED_MSG
     }
     return JSONResponse(content=response)
