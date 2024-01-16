@@ -1,10 +1,10 @@
 const server = "http://localhost:8000/"
+const accessToken = localStorage.getItem("accessToken")
 
 function loadViewDataPage(document) {
     const contentDiv = document.getElementById("content");
     const tableNameSelect = document.getElementById("tableNameSelect");
     const selectedTableName = tableNameSelect.value;
-    const accessToken = localStorage.getItem("accessToken");
     const selectedValue = document.querySelector('input[name="trueFalseOption"]:checked').value;
     const field = document.getElementById("field").value;
     const operator = document.getElementById("operator").value;
@@ -17,7 +17,6 @@ function loadViewDataPage(document) {
     if (field && operator && fieldValue) {
         queryParameter = `?&field=${field}&operator=${operator}&value=${fieldValue}`;
     }
-    // Make API request to fetch data based on the selected table name
     fetch(`${server}${path}/${selectedTableName}${queryParameter}`, {
         method: "GET",
         headers: {
@@ -44,14 +43,12 @@ function loadViewDataPage(document) {
 function handleInsertFormSubmission(document) {
     const tableNameSelect = document.getElementById("tableNameSelect");
     const selectedTableName = tableNameSelect.value;
-    let accessToken = localStorage.getItem("accessToken");
     const insertFieldsValue = JSON.parse(document.getElementById("insertJsonInput").value);
     const isArray = Array.isArray(insertFieldsValue)
     let path = "record"
     if (isArray) {
         path = "records"
     }
-    // Make API request to insert data using the values obtained
     fetch(`${server}${path}`, {
         method: "POST",
         headers: {
@@ -84,7 +81,6 @@ function handleInsertFormSubmission(document) {
 function handleUpdateFormSubmission(document) {
     const tableNameSelect = document.getElementById("tableNameSelect");
     const selectedTableName = tableNameSelect.value;
-    let accessToken = localStorage.getItem("accessToken");
     const updateFieldsValue = document.getElementById("updateJsonInput").value;
     const selectedValue = document.querySelector('input[name="trueFalseOption"]:checked').value;
     const field = document.getElementById("field").value;
@@ -139,7 +135,6 @@ function handleUpdateFormSubmission(document) {
 function handleDeleteFormSubmission(document) {
     const tableNameSelect = document.getElementById("tableNameSelect");
     const selectedTableName = tableNameSelect.value;
-    let accessToken = localStorage.getItem("accessToken");
     const selectedValue = document.querySelector('input[name="trueFalseOption"]:checked').value;
     const field = document.getElementById("field").value;
     const operator = document.getElementById("operator").value;
@@ -202,7 +197,6 @@ function handleQueryExecutionFormSubmission() {
 
 
 function getCollectionNames(document) {
-    let accessToken = localStorage.getItem("accessToken");
     // Fetch table names dynamically and populate the dropdown
     fetch(`${server}collections`, {
         method: "GET",

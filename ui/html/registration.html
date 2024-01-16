@@ -9,24 +9,27 @@
 </head>
 
 <body>
-    <form id="registerForm">
-        <h2>User Registration</h2>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+    <div class="login-container">
+        <form id="registerForm">
+            <h2>User Registration</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
 
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required>
-        <span id="passwordError" class="error"></span>
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <span id="passwordError" class="error"></span>
 
-        <div class="error-container">
-            <p class="error" id="passwordError"></p>
-        </div>
+            <div class="error-container">
+                <p class="error" id="passwordError"></p>
+            </div>
 
-        <button type="submit">Register</button>
-    </form>
+            <button type="submit">Register</button>
+            <p>Already have an account? <a href="login.html">Login here</a>.</p>
+        </form>
+    </div>
 
     <script src="js/registration.js"></script>
 
