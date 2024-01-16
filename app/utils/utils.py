@@ -11,7 +11,11 @@ def get_current_utc_time():
 
 def add_uuid_to_records(records: list):
     """This Method Adds UUID To The Records"""
-    for record in records:
-        if MONGO_ID not in record:
-            record[MONGO_ID] = f"""{uuid4()}"""
-    return records
+    try:
+        for record in records:
+            if MONGO_ID not in record:
+                record[MONGO_ID] = f"""{uuid4()}"""
+        return records
+    except Exception as ex:
+        print(ex)
+        return ex

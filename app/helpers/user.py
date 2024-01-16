@@ -8,9 +8,13 @@ from app.helpers.token_manager import generate_access_token, verify_password
 
 def create_user(fields):
     """This Method Creates New User"""
-    fields.created_at = get_current_utc_time()
-    record = insert_record_to_collection(USER, fields.dict())
-    return record
+    try:
+        fields.created_at = get_current_utc_time()
+        record = insert_record_to_collection(USER, fields.dict())
+        return record
+    except Exception as ex:
+        print(ex)
+        return ex
 
 
 def verify_user(fileds):
