@@ -1,6 +1,6 @@
 """Mongo DB ORM Methods"""
 from uuid import uuid4
-from app.utils.constants import MONGO_ID, MONGO_SET, INSERT_ONE, INSERT_MANY, FIND_ONE, FIND_MANY, DELETE_ONE, DELETE_MANY, UPDATE_ONE, UPDATE_MANY
+from app.utils.constants import MONGO_ID, MONGO_SET, INSERT_ONE, INSERT_MANY, FIND_ONE, FIND_MANY, DELETE_ONE, DELETE_MANY, UPDATE_ONE, UPDATE_MANY, PRE_DEFINED_QUERIES
 
 __mongo_db_client = None
 __data_base = None
@@ -62,3 +62,8 @@ def get_collections_from_db():
     """This Method Gives Collection Names From DB"""
     collections = __data_base.list_collection_names()
     return collections
+
+
+def get_pre_defined_queries_list():
+    """This Method Gives list of Predefined Queries"""
+    return PRE_DEFINED_QUERIES

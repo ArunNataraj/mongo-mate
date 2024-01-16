@@ -2,8 +2,8 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from app.helpers.token_manager import is_token_valid
-from app.helpers.mongo_crud import get_record_from_collection, insert_record_to_collection, update_record_in_collection, delete_record_from_collection, get_collections_from_db
-from app.utils.constants import COLLECTION_NAMES, MESSAGE, RECORDS, USER, INSERT_MANY, FIND_MANY, DELETE_MANY, UPDATE_MANY
+from app.helpers.mongo_crud import get_record_from_collection, insert_record_to_collection, update_record_in_collection, delete_record_from_collection, get_collections_from_db, get_pre_defined_queries_list
+from app.utils.constants import COLLECTION_NAMES, MESSAGE, RECORDS, USER, INSERT_MANY, FIND_MANY, DELETE_MANY, UPDATE_MANY, QUERIES
 from app.utils.validators import CrudRequest
 from app.utils.utils import add_uuid_to_records
 from app.utils.queries import generate_query
@@ -113,5 +113,16 @@ async def delete_record(payload: CrudRequest):
     record = delete_record_from_collection(payload.collection_name, query)
     response = {
         MESSAGE: "Record Deleted From The Collection Successfully"
+    }
+    return JSONResponse(content=response)
+
+
+@crud_router.get("/pre-defined-queries")
+async def get_pre_defined_queries():
+    """Get Pre Defined Queries Endpoint"""
+    queries = get_pre_defined_queries_list()
+    response = {
+        QUERIES: queries,
+        MESSAGE: "Pre Defined Queries Retrieved Successfully"
     }
     return JSONResponse(content=response)

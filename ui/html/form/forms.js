@@ -96,11 +96,7 @@ function getQueryExecutionForm() {
         <h3>Query Execution</h3>
         <form id="queryExecutionForm">
             <label for="querySelect">Select Query:</label>
-            <select id="querySelect">
-                <option value="query1">Query 1</option>
-                <option value="query2">Query 2</option>
-                <!-- Add more queries as needed -->
-            </select>
+            <select id="querySelect"></select>
 
             <label for="queryParameter">Query Parameter:</label>
             <input type="text" id="queryParameter" name="queryParameter" required>

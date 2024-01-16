@@ -33,6 +33,10 @@ function displayViewData(document, data) {
 
     const recordsArray = data.records;
 
+    if (!recordsArray || recordsArray.length === 0 || recordsArray[0] === null) {
+        contentDiv.innerHTML += "<p>No data available for the selected table.</p>";
+        return;
+    }
     // Iterate over each record and create a box for each
     recordsArray.forEach(record => {
         const recordBox = document.createElement("div");

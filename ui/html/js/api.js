@@ -197,16 +197,19 @@ function handleQueryExecutionFormSubmission() {
 
 
 function getCollectionNames(document) {
-    // Fetch table names dynamically and populate the dropdown
+    if (accessToken === null) {
+        window.location.href = "login.html";
+    }
     fetch(`${server}collections`, {
         method: "GET",
         headers: {
-            "Authorization": `Bearer ${accessToken}`, // Replace yourAccessToken with the actual user's access token
+            "Authorization": `Bearer ${accessToken}`,
         },
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error("Network response was not ok");
+                console.error("Network response was not ok", response);
+                window.location.href = "login.html";
             }
             return response.json();
         })
@@ -223,6 +226,42 @@ function getCollectionNames(document) {
                 option.value = tableName;
                 option.text = tableName;
                 tableNameSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching table names:", error);
+            // Handle the error, show a message, or fallback to default table names
+        });
+}
+
+
+function getPredefinedQueries(document) {
+    fetch(`${server}pre-defined-queries`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            const queries = data.queries; // Extracting table names from the response
+            const querySelect = document.getElementById("querySelect");
+
+            // Clear existing options
+            querySelect.innerHTML = "";
+
+            // Populate dropdown with dynamic table names
+            queries.forEach(query => {
+                console.log(typeof(query))
+                const option = document.createElement("option");
+                option.value = Object.keys(query)[0];
+                option.text = query[option.value];
+                querySelect.appendChild(option);
             });
         })
         .catch(error => {

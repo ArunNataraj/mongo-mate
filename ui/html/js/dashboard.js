@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     const contentDiv = document.getElementById("content");
-    let accessToken = localStorage.getItem("accessToken");
     getCollectionNames(document)
 
     // Function to load content dynamically
@@ -19,34 +18,39 @@ document.addEventListener("DOMContentLoaded", function () {
     viewDataLink.addEventListener("click", function (event) {
         event.preventDefault();
         loadContent(getViewForm());
+        getCollectionNames(document);
     });
     insertDataLink.addEventListener("click", function (event) {
         event.preventDefault();
         loadContent(getInsertForm());
+        getCollectionNames(document);
         handleJsonInput(document);
     });
 
     updateDataLink.addEventListener("click", function (event) {
         event.preventDefault();
         loadContent(getUpdateForm());
+        getCollectionNames(document);
         handleJsonInput(document);
     });
 
     deleteDataLink.addEventListener("click", function (event) {
         event.preventDefault();
         loadContent(getDeleteForm());
+        getCollectionNames(document);
     });
 
     queryExecutionLink.addEventListener("click", function (event) {
         event.preventDefault();
         loadContent(getQueryExecutionForm());
+        getCollectionNames(document);
+        getPredefinedQueries(document);
     });
 
     logoutLink.addEventListener("click", function (event) {
         event.preventDefault();
         // Implement logic for logout, redirect to login page, or perform other actions
         localStorage.clear();
-        accessToken = ""
         // history.pushState(null, null, "login.html");
         window.location.href = "login.html";
     });
