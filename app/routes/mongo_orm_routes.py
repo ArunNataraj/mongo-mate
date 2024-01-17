@@ -136,7 +136,7 @@ async def delete_record(payload: CrudRequest):
         payload.collection_name, query)
     record = delete_record_from_collection(payload.collection_name, query)
     response = {
-        RECORDS: [] if record.deleted_count == 0 else deleted_record,
+        RECORDS: [] if record.deleted_count == 0 else [deleted_record],
         MESSAGE: RECORD_DELETED_MSG
     }
     return JSONResponse(content=response)

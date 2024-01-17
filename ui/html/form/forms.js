@@ -30,7 +30,7 @@ function getInsertForm() {
             <textarea id="insertJsonInput" name="insertJson" rows="10" style="width: 100%;" required></textarea>
             <p id="jsonErrorMessage" class="error-message"></p>
         </div>
-        <button type="submit">Insert Record</button>
+        <button type="submit">Insert Record(s)</button>
     </form>`;
 }
 
@@ -99,9 +99,10 @@ function getQueryExecutionForm() {
             <select id="querySelect"></select>
 
             <label for="queryParameter">Query Parameter:</label>
-            <input type="text" id="queryParameter" name="queryParameter" required>
-
+            <input type="text" id="queryParameter" name="queryParameter" required><br>
+            <div>
             <button type="submit">Execute Query</button>
+            </div>
         </form>
     `;
 }

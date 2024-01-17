@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     deleteDataLink.addEventListener("click", function (event) {
         event.preventDefault();
-        loadContent(getQueryForm());
+        loadContent(getDeleteForm());
         getCollectionNames(document);
     });
 
@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
         querySelect.addEventListener("change", function () {
             // Get the selected value from the dropdown
             const queryParams = getQueryParams()
-            console.log(queryParams)
             const queryParameterInput = document.getElementById("queryParameter");
             const selectedQuery = querySelect.value;
 

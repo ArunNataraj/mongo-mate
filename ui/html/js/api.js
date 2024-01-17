@@ -33,7 +33,7 @@ function loadViewDataPage(document) {
         })
         .then(data => {
             // Display the fetched data in the content area
-            displayViewData(document, data);
+            displayViewData(document, data, getViewForm);
         })
         .catch(error => {
             console.error("Error fetching data:", error);
@@ -63,19 +63,19 @@ function handleInsertFormSubmission(document) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                console.error("Network response was not ok", response);
+                if (response.status === 401) {
+                    window.location.href = "login.html";
+                }
             }
             return response.json();
         })
         .then(data => {
-            // Handle successful API response
-            console.log("API response:", data);
-            // Optionally, provide user feedback on success
+            // Display the inserted record as view data
+            displayViewData(document, data, getInsertForm);
         })
         .catch(error => {
-            // Handle error during API call
             console.error("Error during API call:", error);
-            // Optionally, provide user feedback on failure
         });
 }
 
@@ -114,21 +114,20 @@ function handleUpdateFormSubmission(document) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                console.error("Network response was not ok", response);
+                if (response.status === 401) {
+                    window.location.href = "login.html";
+                }
             }
             return response.json();
         })
         .then(data => {
-            // Handle successful API response
-            console.log("API response:", data);
+            // Display the updated record as view data
+            displayViewData(document, data, getUpdateForm);
 
-            // Optionally, provide user feedback on success
         })
         .catch(error => {
-            // Handle error during API call
             console.error("Error during API call:", error);
-
-            // Optionally, provide user feedback on failure
         });
 }
 
@@ -151,7 +150,6 @@ function handleDeleteFormSubmission(document) {
             value: fieldValue
         }
     }
-    // Make API request to delete data using the value obtained
     fetch(`${server}${path}`, {
         method: "DELETE",
         headers: {
@@ -165,23 +163,19 @@ function handleDeleteFormSubmission(document) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                console.error("Network response was not ok", response);
+                if (response.status === 401) {
+                    window.location.href = "login.html";
+                }
             }
             return response.json();
         })
         .then(data => {
-            // Handle successful API response
-            console.log("API response:", data);
-
-            // Display the deleted record as view data
-            // displayViewData(document, { records: [data.deleted_record], message: data.message });
-
-            // Optionally, provide user feedback on success
+            // Display the deleted records as view data
+            displayViewData(document, data, getDeleteForm);
         })
         .catch(error => {
-            // Handle error during API call
             console.error("Error during API call:", error);
-            // Optionally, provide user feedback on failure
         });
 }
 
@@ -227,7 +221,6 @@ function handleQueryExecutionFormSubmission() {
             return response.json();
         })
         .then(data => {
-            console.log("API response:", data);
             displayViewData(document, data, getQueryExecutionForm)
             getPredefinedQueries(document);
         })
@@ -299,7 +292,6 @@ function getPredefinedQueries(document) {
 
             // Clear existing options
             querySelect.innerHTML = "";
-            console.log(queries)
 
             // Populate dropdown with dynamic table names
             Object.keys(queries).forEach(key => {
