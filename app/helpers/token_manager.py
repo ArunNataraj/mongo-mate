@@ -61,6 +61,5 @@ def black_list_token(request: Request):
     authorization = request.headers.get(AUTHORIZATION)
     if authorization:
         access_token = authorization.split(SPACE)[1]
-        print(access_token)
         black_listed_token.add(access_token)
         return True
