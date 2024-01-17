@@ -83,3 +83,8 @@ button:hover {
   display: block;
   margin: 10px auto 0;
 }
+
+.error-message {
+  color: #ff0000;
+  margin-top: 10px;
+}
