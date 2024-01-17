@@ -311,3 +311,32 @@ function getPredefinedQueries(document) {
 function getQueryParams() {
     return queryParams
 }
+
+function handleLogout() {
+    if (accessToken === null) {
+        localStorage.clear();
+        window.location.href = "login.html";
+    }
+    fetch(`${server}logout`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.error("Network response was not ok", response);
+                if (response.status === 401) {
+                    window.location.href = "login.html";
+                }
+            }
+            return response.json();
+        })
+        .then(data => {
+            localStorage.clear();
+            window.location.href = "login.html";
+        })
+        .catch(error => {
+            console.error("Error fetching table names:", error);
+        });
+}

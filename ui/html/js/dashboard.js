@@ -59,10 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     logoutLink.addEventListener("click", function (event) {
         event.preventDefault();
-        // Implement logic for logout, redirect to login page, or perform other actions
-        localStorage.clear();
-        // history.pushState(null, null, "login.html");
-        window.location.href = "login.html";
+        handleLogout();
     });
 
     // Event listener for form submissions

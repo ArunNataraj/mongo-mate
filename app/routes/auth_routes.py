@@ -1,5 +1,5 @@
 """Authentication Routes"""
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
 from app.helpers.token_manager import is_token_valid, black_list_token
 from app.helpers.user import verify_user
@@ -22,9 +22,9 @@ async def login(payload: UserRegistration):
 
 
 @session_router.delete("/logout", dependencies=[Depends(is_token_valid)])
-async def logout():
+async def logout(request: Request):
     """Logout Endpoint"""
-    black_list_token()
+    black_list_token(request)
     response = {
         MESSAGE: USER_LOGOUT_MSG
     }
