@@ -188,12 +188,54 @@ function handleDeleteFormSubmission(document) {
 function handleQueryExecutionFormSubmission() {
     const selectedQuery = document.getElementById("querySelect").value;
     const queryParameter = document.getElementById("queryParameter").value;
+    const tableNameSelect = document.getElementById("tableNameSelect");
+    const selectedTableName = tableNameSelect.value;
 
-    // Make API request to execute the selected query with the provided parameter
-    // ...
+    // Define the data to be sent in the request body
+    const requestBody = {
+        pre_defined_query: selectedQuery,
+        collection_name: selectedTableName
+    };
+    if (selectedQuery === "query1") {
+        requestBody.collection_name = queryParameter
+    }
+    else if (selectedQuery === "query2" || selectedQuery === "query3" || selectedQuery === "query4") {
+        requestBody.field = queryParameter
+    }
+    else if (selectedQuery === "query5") {
+        requestBody.limit_count = parseInt(queryParameter)
+    }
+    else if (selectedQuery === "query6") {
+        requestBody.fields = queryParameter.split(" ")
+    }
 
-    // Optionally, provide user feedback on success or failure
+    fetch(`${server}execute-pre-defined-queries`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.error("Network response was not ok", response);
+                if (response.status === 401) {
+                    window.location.href = "login.html";
+                }
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("API response:", data);
+            displayViewData(document, data, getQueryExecutionForm)
+            getPredefinedQueries(document);
+        })
+        .catch(error => {
+            console.error("Error during API call:", error);
+        });
 }
+
 
 
 function getCollectionNames(document) {
@@ -209,12 +251,15 @@ function getCollectionNames(document) {
         .then(response => {
             if (!response.ok) {
                 console.error("Network response was not ok", response);
-                window.location.href = "login.html";
+                if (response.status === 401) {
+                    window.location.href = "login.html";
+                }
             }
             return response.json();
         })
         .then(data => {
-            const tableNames = data.collection_names; // Extracting table names from the response
+            // Extracting table names from the response
+            const tableNames = data.collection_names;
             const tableNameSelect = document.getElementById("tableNameSelect");
 
             // Clear existing options
@@ -230,7 +275,6 @@ function getCollectionNames(document) {
         })
         .catch(error => {
             console.error("Error fetching table names:", error);
-            // Handle the error, show a message, or fallback to default table names
         });
 }
 
@@ -249,12 +293,14 @@ function getPredefinedQueries(document) {
             return response.json();
         })
         .then(data => {
-            const queries = data.queries; // Extracting table names from the response
+            // Extracting queries from the response
+            const queries = data.queries;
             const querySelect = document.getElementById("querySelect");
 
             // Clear existing options
             querySelect.innerHTML = "";
             console.log(queries)
+
             // Populate dropdown with dynamic table names
             Object.keys(queries).forEach(key => {
                 const query = queries[key];
@@ -266,8 +312,7 @@ function getPredefinedQueries(document) {
             })
         })
         .catch(error => {
-            console.error("Error fetching table names:", error);
-            // Handle the error, show a message, or fallback to default table names
+            console.error("Error fetching pre-defined-queries:", error);
         });
 }
 

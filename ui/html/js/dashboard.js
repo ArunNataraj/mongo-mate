@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     deleteDataLink.addEventListener("click", function (event) {
         event.preventDefault();
-        loadContent(getDeleteForm());
+        loadContent(getQueryForm());
         getCollectionNames(document);
     });
 

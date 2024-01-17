@@ -20,10 +20,10 @@ function handleJsonInput() {
     });
 }
 
-function displayViewData(document, data) {
+function displayViewData(document, data, callback) {
     const contentDiv = document.getElementById("content");
     // Clear existing content
-    contentDiv.innerHTML = `${getViewForm()} <br>`;
+    contentDiv.innerHTML = `${callback()} <br>`;
 
     // Check if data is available
     if (!data || data.length === 0) {
@@ -32,7 +32,10 @@ function displayViewData(document, data) {
     }
 
     const recordsArray = data.records;
-
+    if (typeof (recordsArray) === "string") {
+        contentDiv.innerHTML += `<p>${recordsArray}</p>`;
+        return;
+    }
     if (!recordsArray || recordsArray.length === 0 || recordsArray[0] === null) {
         contentDiv.innerHTML += "<p>No data available for the selected table.</p>";
         return;
